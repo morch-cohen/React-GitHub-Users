@@ -36,7 +36,9 @@ export function useGithubUsers() {
       const response = await fetch(githubAPI.getUsers(PER_PAGE, sinceIdRef.current))
 
       if (!response.ok) {
-        throw new Error(`GitHub API error: ${response.status} ${response.statusText}`)
+        const err = new Error(`GitHub API error: ${response.status} ${response.statusText}`)
+        err.status = response.status
+        throw err
       }
 
       const data = await response.json()
@@ -58,7 +60,11 @@ export function useGithubUsers() {
         setHasMore(false)
       }
     } catch (err) {
-      setError(err.message)
+      if (err.status === 403) {
+        setError('GitHub API rate limit exceeded. Please wait a moment and try again.')
+      } else {
+        setError(err.message)
+      }
     } finally {
       setLoading(false)
       isFetchingRef.current = false
