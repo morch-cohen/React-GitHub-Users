@@ -50,7 +50,11 @@ function UserCardComponent({ user }) {
         </p>
         <p className="text-xs text-muted-foreground">GitHub User</p>
       </div>
-      <Button asChild className="w-full rounded-full bg-green-50 hover:bg-green-100 text-green-700 border-none shadow-none" size="sm">
+      {/* 
+        Hover colors use ! (important) to override shadcn's default variant styles 
+        which otherwise force a black background/text on hover for 'asChild' elements. 
+      */}
+      <Button asChild className="w-full rounded-full bg-green-50 hover:!bg-green-100 text-green-700 hover:!text-green-800 border-none shadow-none" size="sm">
         <a
           href={user.profileUrl}
           target="_blank"
