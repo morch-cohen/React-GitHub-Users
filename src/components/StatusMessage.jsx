@@ -1,4 +1,4 @@
-import { RefreshCw, Loader2 } from 'lucide-react'
+import { RefreshCw } from 'lucide-react'
 
 /**
  * Displays contextual status messages based on the current fetch/filter state.
@@ -32,11 +32,7 @@ export function StatusMessage({ loading, error, hasMore, isEmpty, usersCount, on
 
   // Simple, readable logic gate
   if (fullPageLoading) return <Centered><Message>Loading users...</Message></Centered>;
-  if (paginationLoading) return (
-    <div className="flex justify-center py-4">
-      <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
-    </div>
-  );
+  if (paginationLoading) return <Centered><Message>Loading more...</Message></Centered>;
   if (error) return (
     <div className="w-full rounded-md bg-red-50 border border-red-200 px-4 py-3 flex items-center justify-between gap-2">
       <p className="text-sm text-red-600">{error}</p>

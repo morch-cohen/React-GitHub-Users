@@ -14,7 +14,7 @@ export function FilterInput({ value, onChange }) {
       placeholder="Filter by username..."
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="w-full"
+      className="w-full bg-white"
     />
   )
 }

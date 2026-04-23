@@ -25,20 +25,39 @@ function App() {
 
   useIntersectionObserver(sentinelRef, handleSentinelVisible)
 
-  const isEmpty = filterText.length > 0 && filteredUsers.length === 0
-
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8 flex flex-col gap-4">
-      <FilterInput value={filterText} onChange={setFilterText} />
-      <UserList users={filteredUsers} sentinelRef={sentinelRef} />
-      <StatusMessage
-        loading={loading}
-        error={error}
-        hasMore={hasMore}
-        isEmpty={isEmpty}
-        usersCount={users.length}
-        onRetry={loadMore}
-      />
+    <div className="flex flex-col min-h-screen">
+      {/* Full-width sticky header */}
+      <header
+        className="sticky top-0 z-10 w-full bg-green-50 px-4 py-4"
+        style={{ boxShadow: '0 2px 8px -2px rgba(0,0,0,0.10)' }}
+      >
+        <div className="grid grid-cols-[1fr_2fr_1fr] items-center gap-4 px-4">
+          <h1 className="text-base font-semibold whitespace-nowrap text-foreground">
+            GitHub Users Browser
+          </h1>
+          <div className="w-full">
+            <FilterInput value={filterText} onChange={setFilterText} />
+          </div>
+          <div />
+        </div>
+      </header>
+
+      {/* Scrollable content */}
+      <div
+        className="max-w-3xl mx-auto w-full flex flex-col gap-8 px-4 py-8"
+        style={{ willChange: 'transform' }}
+      >
+        <UserList users={filteredUsers} sentinelRef={sentinelRef} />
+        <StatusMessage
+          loading={loading}
+          error={error}
+          hasMore={hasMore}
+          isEmpty={filteredUsers.length === 0}
+          usersCount={users.length}
+          onRetry={loadMore}
+        />
+      </div>
     </div>
   )
 }

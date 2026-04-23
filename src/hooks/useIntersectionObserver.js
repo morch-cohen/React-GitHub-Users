@@ -28,7 +28,7 @@ export function useIntersectionObserver(ref, callback) {
           }
         })
       },
-      { threshold: 0.1 }
+      { threshold: 0, rootMargin: '100px' }
     )
 
     observer.observe(element)

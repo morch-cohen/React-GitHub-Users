@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { githubAPI } from '../api/githubClient'
+import { githubAPI, getGithubHeaders } from '../api/githubClient'
 
 const PER_PAGE = 10
 
@@ -33,7 +33,9 @@ export function useGithubUsers() {
     setError(null)
 
     try {
-      const response = await fetch(githubAPI.getUsers(PER_PAGE, sinceIdRef.current))
+      const response = await fetch(githubAPI.getUsers(PER_PAGE, sinceIdRef.current), {
+        headers: getGithubHeaders(),
+      })
 
       if (!response.ok) {
         const err = new Error(`GitHub API error: ${response.status} ${response.statusText}`)
@@ -69,7 +71,7 @@ export function useGithubUsers() {
       setLoading(false)
       isFetchingRef.current = false
     }
-  }, [loading, hasMore])
+  }, [hasMore])
 
   /**
    * Stable callback to trigger more users to load.

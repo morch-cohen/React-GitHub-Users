@@ -10,7 +10,10 @@ import { UserCard } from '@/components/UserCard'
 export function UserList({ users, sentinelRef }) {
   return (
     <>
-      <ul className="flex flex-col gap-3 list-none p-0 m-0">
+      <ul
+        className="grid gap-8 list-none p-0 m-0"
+        style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))' }}
+      >
         {users.map((user) => (
           <li key={user.id}>
             <UserCard user={user} />
