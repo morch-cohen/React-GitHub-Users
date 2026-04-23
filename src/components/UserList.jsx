@@ -1,26 +1,39 @@
+import { VirtuosoGrid } from 'react-virtuoso'
 import { UserCard } from '@/components/UserCard'
+import { forwardRef } from 'react'
+
+const GridList = forwardRef((props, ref) => (
+  <div
+    {...props}
+    ref={ref}
+    className="grid gap-8 list-none p-0 m-0"
+    style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', ...props.style }}
+  />
+))
+
+const ItemContainer = ({ children, ...props }) => (
+  <div {...props}>{children}</div>
+)
 
 /**
- * Renders a list of GitHub user cards and a scroll sentinel at the bottom.
+ * Renders a list of GitHub user cards using DOM virtualization.
  *
  * @param {Object} props
  * @param {Array} props.users - Array of user objects to display.
- * @param {React.RefObject} props.sentinelRef - Ref attached to the scroll sentinel div.
+ * @param {Function} props.onEndReached - Callback when the user scrolls to the bottom.
  */
-export function UserList({ users, sentinelRef }) {
+export function UserList({ users, onEndReached }) {
   return (
-    <>
-      <ul
-        className="grid gap-8 list-none p-0 m-0"
-        style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))' }}
-      >
-        {users.map((user) => (
-          <li key={user.id}>
-            <UserCard user={user} />
-          </li>
-        ))}
-      </ul>
-      <div ref={sentinelRef} />
-    </>
+    <VirtuosoGrid
+      data={users}
+      endReached={onEndReached}
+      overscan={300}
+      useWindowScroll
+      components={{
+        List: GridList,
+        Item: ItemContainer
+      }}
+      itemContent={(index, user) => <UserCard user={user} />}
+    />
   )
 }

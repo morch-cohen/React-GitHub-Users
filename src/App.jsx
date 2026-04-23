@@ -1,6 +1,5 @@
 import { useState, useMemo, useRef, useCallback } from 'react'
 import { useGithubUsers } from '@/hooks/useGithubUsers'
-import { useIntersectionObserver } from '@/hooks/useIntersectionObserver'
 import { UserList } from '@/components/UserList'
 import { FilterInput } from '@/components/FilterInput'
 import { StatusMessage } from '@/components/StatusMessage'
@@ -15,15 +14,10 @@ function App() {
     [users, filterText]
   )
 
-  // Sentinel ref for the IntersectionObserver
-  const sentinelRef = useRef(null)
-
-  // Guard: only load more if not already loading and there are more results
-  const handleSentinelVisible = useCallback(() => {
-    if (!loading && hasMore) loadMore()
-  }, [loading, hasMore, loadMore])
-
-  useIntersectionObserver(sentinelRef, handleSentinelVisible)
+  // Guard: only load more if not already loading, there are more results, and filter is empty
+  const handleEndReached = useCallback(() => {
+    if (!loading && hasMore && filterText.trim() === '') loadMore()
+  }, [loading, hasMore, loadMore, filterText])
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -48,7 +42,7 @@ function App() {
         className="max-w-3xl mx-auto w-full flex flex-col gap-8 px-4 py-8"
         style={{ willChange: 'transform' }}
       >
-        <UserList users={filteredUsers} sentinelRef={sentinelRef} />
+        <UserList users={filteredUsers} onEndReached={handleEndReached} />
         <StatusMessage
           loading={loading}
           error={error}
