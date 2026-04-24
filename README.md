@@ -2,8 +2,7 @@
 
 A highly optimized, production-ready React application for browsing GitHub users with infinite scrolling, virtualization, and client-side filtering. 
 
-**Live Repository Link:**  
-[https://github.com/morch-cohen/React-GitHub-Users](https://github.com/morch-cohen/React-GitHub-Users)
+[**Live GitHub Page**](https://morch-cohen.github.io/React-GitHub-Users/)
 
 ## Tech Stack
 *Dependencies actually utilized in this project:*
