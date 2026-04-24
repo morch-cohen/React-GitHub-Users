@@ -50,6 +50,7 @@ function App() {
           isEmpty={filteredUsers.length === 0}
           usersCount={users.length}
           onRetry={loadMore}
+          isFiltering={filterText.trim() !== ''}
         />
       </div>
     </div>

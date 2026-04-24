@@ -1,6 +1,10 @@
 import { memo } from 'react'
-import { Card, CardContent } from '@/components/ui/card'
+import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import fallbackAvatarRaw from '../assets/fallback-avatar.svg?raw'
+import { githubAPI } from '../api/githubClient'
+
+const fallbackAvatar = `data:image/svg+xml;utf8,${encodeURIComponent(fallbackAvatarRaw)}`
 
 /**
  * Renders a single GitHub user card with avatar, username, and a profile link.
@@ -31,7 +35,7 @@ function UserCardComponent({ user }) {
     <Card className="flex flex-col items-center text-center p-6 gap-4 h-full min-h-[200px] [box-shadow:0_0_6px_rgba(0,0,0,0.08)] ring-0 outline-none border-0">
       <div className="shrink-0 rounded-full p-1 bg-green-50">
         <img
-          src={user.avatarUrl || `https://github.com/identicons/${user.username}.png`}
+          src={user.avatarUrl}
           alt={user.username}
           width={40}
           height={40}
@@ -39,8 +43,16 @@ function UserCardComponent({ user }) {
           className="!rounded-full bg-muted object-cover"
           style={{ width: 40, height: 40, minWidth: 40 }}
           onError={(e) => {
-            e.currentTarget.onerror = null
-            e.currentTarget.src = `https://github.com/identicons/${user.username}.png`
+            const target = e.currentTarget;
+            const githubUrl = githubAPI.getIdenticon(user.username);
+
+            // Stop the loop if we are offline or already tried GitHub
+            if (!navigator.onLine || target.src === githubUrl) {
+              target.onerror = null;
+              target.src = fallbackAvatar;
+            } else {
+              target.src = githubUrl;
+            }
           }}
         />
       </div>

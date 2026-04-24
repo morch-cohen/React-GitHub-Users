@@ -11,7 +11,7 @@ import { RefreshCw } from 'lucide-react'
  * @param {number} props.usersCount - Total number of fetched users (unfiltered).
  * @param {Function} [props.onRetry] - Optional callback to retry the failed fetch.
  */
-export function StatusMessage({ loading, error, hasMore, isEmpty, usersCount, onRetry }) {
+export function StatusMessage({ loading, error, hasMore, isEmpty, usersCount, onRetry, isFiltering }) {
   const fullPageLoading = loading && usersCount === 0;
   const paginationLoading = loading && usersCount > 0;
   const allLoaded = !hasMore && !loading && usersCount > 0;
@@ -31,6 +31,11 @@ export function StatusMessage({ loading, error, hasMore, isEmpty, usersCount, on
   );
 
   // Simple, readable logic gate
+  if (isFiltering) {
+    if (isEmpty) return <Centered><Message>No users found</Message></Centered>;
+    return null;
+  }
+
   if (fullPageLoading) return <Centered><Message>Loading users...</Message></Centered>;
   if (paginationLoading) return <Centered><Message>Loading more...</Message></Centered>;
   if (error) return (
